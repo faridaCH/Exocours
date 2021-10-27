@@ -2,12 +2,15 @@ package com.medicale.servelet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.medicale.bo.Patient;
 
 /**
  * Servlet implementation class Test
@@ -56,6 +59,8 @@ public class Test extends HttpServlet {
 			prenom = "";
 		if (dateNaissance == null)
 			dateNaissance = " abscence de date de naissance ";
+		Patient pat = new Patient(nom, prenom, Date.valueOf(dateNaissance), adresse, pays, ville);
+		Patient.addPatient(pat);
 
 		response.setContentType("text/html");
 		try (PrintWriter out = response.getWriter()) {
@@ -66,8 +71,6 @@ public class Test extends HttpServlet {
 			out.println("    </head>");
 			out.println("    <body>");
 			out.println("        <h1>Bonjour " + nom + " " + prenom + "</h1>");
-//			
-
 			out.println("<p>   vous etes né le  :  " + dateNaissance + "</p>");
 			out.println(" <p> adresse complet : " + adresse + " " + ville + " " + pays + "</p>");
 			out.println("    </body>");

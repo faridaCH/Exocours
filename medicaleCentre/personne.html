@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personne</title>
+<link rel="stylesheet" href="style.css">
+<script src="form.js"></script>
+<!-- <a href="#www.formulaireAJAX.fr"> formulaire ajax</a> -->
+</head>
+
+<body>
+	<form action="http://localhost:8080/medicaleCentre/bonjour"
+		method="post" >
+		<table align="center" border="6"
+			style="border-color: rgb(200, 115, 218);">
+
+			<tr>
+				<th colspan="2">Formulaire d'inscréption</th>
+			</tr>
+			<tr>
+
+				<th colspan="2">
+					<hr>
+				</th>
+			</tr>
+			<tr>
+				<td><label for="idNom"></label> Nom*:</td>
+				<td><input type="text" name="nom" placeholder="votre nom"
+					id="idNom"></td>
+			</tr>
+			<tr>
+				<td><label for="idPrenom"></label> Prenom*:</td>
+				<td><input type="text" name="prenom" placeholder="Votre Prénom"
+					id="idPrenom"></td>
+			</tr>
+			<tr>
+				<td><label for="idDateNaiss"> Date de Naissance*:</label></td>
+				<td><input type="date" name="dateNaissance"
+					placeholder="Votre Date de Naissance" id="iddateNaiss"></td>
+			</tr>
+			<tr>
+				<td><label for="idAdress"> Adresse*: </label></td>
+				<td><input type="textarea" name="adresse"
+					placeholder="Votre Adresse" id="idAdress"></td>
+			</tr>
+
+			<!-- /*************************************************************************************************/ -->
+
+			<!-- /****************************************************************************************************/ -->
+			<tr>
+				<td><label for="idPays"> Pays*: </label></td>
+				<td><select name="pays" id="pays" onchange="load()">
+						<option value="france">France</option>
+						<option value="Maroc">Maroc</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td><label for="idVille"> Ville*: </label></td>
+				<td><select name="ville" id="ville">
+						<option value="Nice">Nice</option>
+						<option value="paris">Paris</option>
+						<option value="Rabat">Rabat</option>
+				</select></td>
+			</tr>
+			<tr aria-colspan="2">
+
+				<td colspan="2" align="center">
+				<input type="submit" value=" envoyer " id="idenv"
+style="color: rgb(107, 57, 99); background-color: darkgrey;"></td>
+			</tr>
+			<tr></tr>
+		</table>
+	</form>
+
+</body>
+
+</html>
