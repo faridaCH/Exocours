@@ -2,7 +2,7 @@ package com.medicale.servelet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,16 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.medicale.bo.Patient;
 
 /**
- * Servlet implementation class Test
+ * Servlet implementation class FindPatientServelet
  */
-@WebServlet("/bonjour")
-public class Test extends HttpServlet {
+@WebServlet("/listages")
+public class FindPatientServelet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Test() {
+	public FindPatientServelet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -35,52 +35,12 @@ public class Test extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-		System.out.println(" je suis dans le doPost");
-
-		String nom = request.getParameter("nom");
-		String prenom = request.getParameter("prenom");
-		String dateNaissance = request.getParameter("dateNaissance");
-		String adresse = request.getParameter("adresse");
-		String pays = request.getParameter("pays");
-		String ville = request.getParameter("ville");
-		if (nom == null)
-			nom = "";
-		if (prenom == null)
-			prenom = "";
-		if (dateNaissance == null)
-			dateNaissance = " abscence de date de naissance ";
-		Patient pat = new Patient(nom, prenom, Date.valueOf(dateNaissance), adresse, pays, ville);
-		Patient.addPatient(pat);
-
-//		response.setContentType("text/html");
-//		try (PrintWriter out = response.getWriter()) {
-//			out.println("<!DOCTYPE html>");
-//			out.println("<html>");
-//			out.println("    <head>");
-//			out.println("        <title>Page prenom</title>");
-//			out.println("    </head>");
-//			out.println("    <body>");
-//			out.println("        <h1>Bonjour " + nom + " " + prenom + "</h1>");
-//			out.println("<p>   vous etes né le  :  " + dateNaissance + "</p>");
-//			out.println(" <p> adresse complet : " + adresse + " " + ville + " " + pays + "</p>");
-//			out.println("    </body>");
-//			out.println("</html>");
-//
-//		}
 
 		/*
 		 * ****************************************************************************
 		 */
+		List<Patient> listPat = Patient.findAllPatient();
+		int i = 0;
 		response.setContentType("text/html");
 		try (PrintWriter out = response.getWriter()) {
 
@@ -115,27 +75,35 @@ public class Test extends HttpServlet {
 			out.println("</tr>");
 			out.println("</thead>");
 			out.println("<tbody>");
-			out.println("<tr>");
-			out.println("<td>" + "$i" + "</td>");
-			out.println("<td>" + nom + "</td>");
-			out.println("<td>" + prenom + "</td>");
-			out.println("<td>" + dateNaissance + "</td>");
-			out.println("<td>" + adresse + "</td>");
-			out.println("<td>" + pays + "</td>");
-			out.println("<td>" + ville + "</td>");
-			out.println("<td>");
-			out.println("<button type='button' class='btn btn-outline-success btn-sm'>");
-			out.println(" <i class='fa fa-pencil-square-o' aria-hidden='true'></i>");
-			out.println("</button>");
-			out.println("<button type='button' class='btn btn-outline-danger btn-sm'>");
-			out.println("<i class='fa fa-trash' aria-hidden='true'></i>");
-			out.println("</button>");
-			out.println("</td>");
-			out.println("</tr>");
+			for (Patient pat : listPat) {
+				i++;
+				out.println("<tr>");
+
+				out.println("<td>" + i + "</td>");
+				out.println("<td>" + pat.getNom() + "</td>");
+				out.println("<td>" + pat.getPrenom() + "</td>");
+				out.println("<td>" + pat.getDateNaissance() + "</td>");
+				out.println("<td>" + pat.getAdresse() + "</td>");
+				out.println("<td>" + pat.getPays() + "</td>");
+				out.println("<td>" + pat.getVille() + "</td>");
+
+				out.println("<td>");
+				out.println("<button type='button' class='btn btn-outline-success btn-sm'>");
+				out.println(" <i class='fa fa-pencil-square-o' aria-hidden='true'></i>");
+				out.println("</button>");
+				out.println("<button type='button' class='btn btn-outline-danger btn-sm'>");
+				out.println("<i class='fa fa-trash' aria-hidden='true'></i>");
+				out.println("</button>");
+				out.println("</td>");
+				out.println("</tr>");
+			}
 			out.println("</tbody>");
 			out.println("</table>");
 			out.println("</body>");
 			out.println("</html>");
+
 		}
+
 	}
+
 }

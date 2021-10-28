@@ -6,8 +6,11 @@ package com.medicale.bo;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.medicale.connection.ConnectionServelet;
 
@@ -17,12 +20,12 @@ import com.medicale.connection.ConnectionServelet;
  */
 public class Patient {
 	private static Integer id = 0;
-	private String nom;
-	private String prenom;
-	private Date dateNaissance;
-	private String adresse;
-	private String pays;
-	private String ville;
+	private static String nom;
+	private static String prenom;
+	private static Date dateNaissance;
+	private static String adresse;
+	private static String pays;
+	private static String ville;
 
 	/**
 	 * 
@@ -134,13 +137,14 @@ public class Patient {
 	}
 
 	public static void addPatient(Patient p) {
+
 		try (Connection connect = ConnectionServelet.getConnection();
 				Statement st = connect.createStatement();
 				PreparedStatement ps = connect.prepareStatement(
 						"INSERT INTO Patient(nom,prenom,dateNaissance,adresse,pays,ville)Values(?,?,?,?,?,?)");) {
 
 			// desactivation de lautocommit
-			connect.setAutoCommit(false);
+//			connect.setAutoCommit(false);
 
 			ps.setString(1, p.getNom());
 			ps.setString(2, p.getPrenom());
@@ -163,6 +167,7 @@ public class Patient {
 //			ps.executeUpdate();
 //			ps.executeQuery();
 			connect.commit();
+//			connect.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -170,9 +175,35 @@ public class Patient {
 
 	}
 
-//	public static void main(String[] args) {
-//		Patient pat = new Patient("toto", "momo", Date.valueOf("2020-10-05"), "hjgkhjhjjlk", "France", "Nice");
-//		addPatient(pat);
-//		System.out.println("end");
-//	}
+	public static List<Patient> findAllPatient() {
+		List<Patient> patientsBD = new ArrayList<Patient>();
+		String sql = null;
+
+		// connection à la base de données
+		try (Connection connect = ConnectionServelet.getConnection(); Statement st = connect.createStatement();) {
+
+			// desactivation de lautocommit
+			connect.setAutoCommit(false);
+
+			// Construction de la requete d'insertion
+			sql = "SELECT * FROM patient;";
+			// execuyion de la requête
+			ResultSet resultSet = st.executeQuery(sql);
+			// recuperation des resultats
+			while (resultSet.next()) {
+				Patient pat = new Patient(resultSet.getString("nom"), resultSet.getString("prenom"),
+						Date.valueOf(resultSet.getString("dateNaissance")), resultSet.getString("adresse"),
+						resultSet.getString("pays"), resultSet.getString("ville"));
+				patientsBD.add(pat);
+			}
+//			connect.commit();
+//			connect.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return patientsBD;
+
+	}
+
 }
