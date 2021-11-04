@@ -2,11 +2,14 @@ package medical.m2i.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import medical.m2i.dao.UserDao;
 
 /**
  * Servlet implementation class LoginServlet
@@ -30,7 +33,8 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -40,7 +44,27 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		System.out.println("username reÃ§u = " + username);
+
+		UserDao udao = new UserDao();
+
+		try {
+			if (udao.getUsersByUsernameAndPassword(username, password).size() > 0) {
+				// authentification ok, redirection vers la liste des patients
+				// confirmation d'authentification
+				response.getWriter().println("ok");
+
+			} else {
+				// Auth ko,on affiche de nouveau le form d'authentification
+				// annulation de l'authentification
+				response.getWriter().println("ko");
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

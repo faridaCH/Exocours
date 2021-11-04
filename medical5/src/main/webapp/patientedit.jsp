@@ -75,12 +75,14 @@ ArrayList<Ville> lv = new ArrayList<Ville>();
             </div>
 
             <div class="form-line mb-4">
-                <button type="submit" class="btn btn-primary">Envoyer</button>
+                <button id="submitbtnedit" type="submit" class="btn btn-primary">Envoyer</button>
             </div>
 
         </form>
     </main>
     <%@ include file="fragments/footer.jsp" %>
+   
+    
 </body>
 
 </html>

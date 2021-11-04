@@ -12,6 +12,9 @@
 <body>
 <%@ include file="fragments/header.jsp" %>
 <main class="container">
+<!-- <div id="msgedit" class="alert alert-success" role="alert">
+  Votre modification a été prise ne compte 
+</div> -->
 <h3>Liste des patients</h3>
 
 <table class="table table-striped">
