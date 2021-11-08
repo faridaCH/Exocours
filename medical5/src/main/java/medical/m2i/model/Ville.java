@@ -24,7 +24,7 @@ public class Ville implements Serializable {
 	private String nom;
 
 	@Column(nullable = false, length = 150)
-	private Integer codePostal;
+	private Integer code_postal;
 
 	@Column(nullable = false, length = 150)
 	private String pays;
@@ -50,33 +50,7 @@ public class Ville implements Serializable {
 		super();
 		this.id = id;
 		this.nom = nom;
-		this.codePostal = code_postal;
-	}
-
-	/**
-	 * @param nom
-	 * @param code_postal
-	 * @param pays
-	 */
-	public Ville(String nom, Integer code_postal, String pays) {
-		super();
-		this.nom = nom;
-		this.codePostal = code_postal;
-		this.pays = pays;
-	}
-
-	/**
-	 * @param id
-	 * @param nom
-	 * @param code_postal
-	 * @param pays
-	 */
-	public Ville(Integer id, String nom, Integer code_postal, String pays) {
-		super();
-		this.id = id;
-		this.nom = nom;
-		this.codePostal = code_postal;
-		this.pays = pays;
+		this.code_postal = code_postal;
 	}
 
 	/**
@@ -111,18 +85,19 @@ public class Ville implements Serializable {
 	 * @return the code_postal
 	 */
 	public Integer getCode_postal() {
-		return codePostal;
+		return code_postal;
 	}
 
 	/**
 	 * @param code_postal the code_postal to set
 	 */
 	public void setCode_postal(Integer code_postal) {
-		this.codePostal = code_postal;
+		this.code_postal = code_postal;
 	}
+
+}
 
 //	public void setCode_postal(String codepostal) {
 //		// TODO Auto-generated method stub
 //		this.code_postal = Integer.parseInt(codepostal);
 //	}
-}
