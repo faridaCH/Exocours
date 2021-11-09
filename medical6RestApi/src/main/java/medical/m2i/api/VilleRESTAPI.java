@@ -1,6 +1,6 @@
 package medical.m2i.api;
 
-import entities.PatientEntity;
+
 import entities.VilleEntity;
 import medical.m2i.dao.DbConncection;
 
@@ -60,5 +60,23 @@ public class VilleRESTAPI {
 
         }
 
+        // supprimer une ville
+        @DELETE
+        @Path("/{id}")
+        public void deleteVille(@PathParam("id") int id) {
+        VilleEntity p = em.find(VilleEntity.class, id);
+            EntityTransaction tx = em.getTransaction();
+            // D�but des modifications
+            try {
+                tx.begin();
+                em.remove(p);
+                tx.commit();
+                System.out.println(" fin de delete user");
+            } catch (Exception e) {
+                tx.rollback();
+            } finally {
+
+            }
+        }
     }
 

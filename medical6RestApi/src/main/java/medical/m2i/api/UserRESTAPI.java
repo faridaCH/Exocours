@@ -1,5 +1,6 @@
 package medical.m2i.api;
 
+
 import entities.UserEntity;
 import medical.m2i.dao.DbConncection;
 
@@ -57,6 +58,25 @@ public class UserRESTAPI {
                 // emf.close();
             }
 
+        }
+        // supprimer un user
+
+        @DELETE
+        @Path("/{id}")
+        public void deleteUser(@PathParam("id") int id) {
+            UserEntity p = em.find(UserEntity.class, id);
+            EntityTransaction tx = em.getTransaction();
+            // D�but des modifications
+            try {
+                tx.begin();
+                em.remove(p);
+                tx.commit();
+                System.out.println(" fin de delete user");
+            } catch (Exception e) {
+                tx.rollback();
+            } finally {
+
+            }
         }
 
     }
