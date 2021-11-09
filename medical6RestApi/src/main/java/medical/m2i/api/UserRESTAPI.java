@@ -39,7 +39,7 @@ public class UserRESTAPI {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("")
-    public void addPatient(UserEntity p){
+    public void addUser(UserEntity p){
 
 
             // Récupération d’une transaction
@@ -74,10 +74,41 @@ public class UserRESTAPI {
                 System.out.println(" fin de delete user");
             } catch (Exception e) {
                 tx.rollback();
+                System.out.println("message Error : " +e );
             } finally {
 
             }
         }
+
+    // supprimer un user
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public void updateUser(@PathParam("id") int id,UserEntity uParam) {
+        UserEntity u = em.find(UserEntity.class, id);
+
+        // D�but des modifications
+        u.setName(uParam.getName());
+        u.setPassword(uParam.getPassword());
+        u.setUsername(uParam.getUsername());
+        u.setRoles(uParam.getRoles());
+        u.setEmail(uParam.getEmail());
+        u.setPhotouser(uParam.getPhotouser());
+
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.persist(u);
+            tx.commit();
+            System.out.println(" fin de delete user");
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println("message Error : " +e.getMessage() );
+        } finally {
+
+        }
+    }
 
     }
 

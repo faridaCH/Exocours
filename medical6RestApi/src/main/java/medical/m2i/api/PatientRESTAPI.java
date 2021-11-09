@@ -9,6 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/patient")
@@ -29,7 +30,7 @@ public class PatientRESTAPI {
 
     // patient 1
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON) // @Produces  car la methode a un parametere de return
     @Path("/{id}")
     public PatientEntity getOne(@PathParam("id") int id) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
@@ -39,11 +40,9 @@ public class PatientRESTAPI {
 
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)  //  on met @Consumes car la methode prend a un paramettre d'entée
     @Path("")
     public void addPatient(PatientEntity p) {
-
-
         // Récupération d’une transaction
         EntityTransaction tx = em.getTransaction();
         // Début des modifications
@@ -67,11 +66,47 @@ public class PatientRESTAPI {
     @Path("/{id}")
     public void deletePatient(@PathParam("id") int id) {
         PatientEntity p = em.find(PatientEntity.class, id);
+        // solution de gestion d'exception voir d'autre cas dans ville et user
+        if(p==null){
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        //recuperation d'une transaction
         EntityTransaction tx = em.getTransaction();
         // D�but des modifications
         try {
             tx.begin();
             em.remove(p);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+
+        }
+    }
+
+    // update d'un Patient
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public void updatePatient(@PathParam("id") int id, PatientEntity pParam) {
+        PatientEntity p = em.find(PatientEntity.class, id);
+        // solution de gestion d'exception voir d'autre cas dans ville et user
+        if(p==null){
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }else {
+
+            p.setNom(pParam.getNom());
+            p.setPrenom(pParam.getPrenom());
+            p.setDateNaissance(pParam.getDateNaissance());
+            p.setAdresse(pParam.getAdresse());
+            p.setVille(pParam.getVille());
+        }
+        //recuperation d'une transaction
+        EntityTransaction tx = em.getTransaction();
+        // Début des modifications
+        try {
+            tx.begin();
+            em.persist(p);
             tx.commit();
         } catch (Exception e) {
             tx.rollback();

@@ -10,6 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/ville")
@@ -26,6 +27,17 @@ public class VilleRESTAPI {
         List<VilleEntity> p=em.createNativeQuery("SELECT * FROM ville", VilleEntity.class).getResultList();
         return p;
     }
+
+
+   private VilleEntity getVille(int id){
+        EntityManagerFactory emf= Persistence.createEntityManagerFactory("default");
+
+       VilleEntity v=em.find(VilleEntity.class,id);
+       if(v==null){
+           throw new WebApplicationException(Response.Status.NOT_FOUND);
+       }
+       return v;
+    }
 // ville1
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,15 +45,13 @@ public class VilleRESTAPI {
     public VilleEntity getOne(@PathParam("id") int id){
         EntityManagerFactory emf= Persistence.createEntityManagerFactory("default");
 
-        return em.find(VilleEntity.class,id);
+        return getVille(id);
     }
     // ajouter une Ville
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("")
-    public void addPatient(VilleEntity p){
-
-
+    public void addVille(VilleEntity p){
             // Récupération d’une transaction
             EntityTransaction tx = em.getTransaction();
             // Début des modifications
@@ -60,23 +70,30 @@ public class VilleRESTAPI {
 
         }
 
-        // supprimer une ville
-        @DELETE
-        @Path("/{id}")
-        public void deleteVille(@PathParam("id") int id) {
-        VilleEntity p = em.find(VilleEntity.class, id);
-            EntityTransaction tx = em.getTransaction();
-            // D�but des modifications
-            try {
-                tx.begin();
-                em.remove(p);
-                tx.commit();
-                System.out.println(" fin de delete user");
-            } catch (Exception e) {
-                tx.rollback();
-            } finally {
 
-            }
+
+    // update une ville
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public void updateVille(@PathParam("id") int id,VilleEntity vParam) {
+        VilleEntity v = getVille(id);
+
+        // D�but des modifications
+        v.setNom(vParam.getNom());
+        v.setCodePostal(vParam.getCodePostal());
+        v.setPays(vParam.getPays());
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.persist(v);
+            tx.commit();
+            System.out.println(" fin de delete user");
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+
         }
+    }
     }
 
