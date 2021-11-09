@@ -1,12 +1,10 @@
 package medical.m2i.api;
 
 import entities.PatientEntity;
+import entities.VilleEntity;
 import medical.m2i.dao.DbConncection;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,24 +14,48 @@ import java.util.List;
 public class PatientRESTAPI {
 
     EntityManager em = DbConncection.getInstance();
-
-    // patient
+/*
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("")
-    public List<PatientEntity> getAll() {
+    public List<PatientEntity> getAll(){
+        EntityManagerFactory emf= Persistence.createEntityManagerFactory("default");
+        EntityManager   em=emf.createEntityManager();
+        return em.createNativeQuery("SELECT * FROM patient", PatientEntity.class).getResultList();
+
+    }
+
+ */
+
+
+
+
+// patient
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("")
+    public List<PatientEntity> getAllByName(@QueryParam("nom") String pnom) {
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
-        List<PatientEntity> p = em.createNativeQuery("SELECT * FROM patient", PatientEntity.class).getResultList();
-        return p;
+        if (pnom.length() == 0) {
+            // p = em.createNativeQuery("SELECT * FROM Patient", PatientEntity.class).getResultList();
+        return     em.createNamedQuery("Patient.findAll", PatientEntity.class).getResultList();
+        } else {
+        return     em.createNamedQuery("Patient.findAllByName", PatientEntity.class).setParameter("nom", "%"+pnom+"%").getResultList();
+        }
+
     }
+
+
+
 
     // patient 1
     @GET
     @Produces(MediaType.APPLICATION_JSON) // @Produces  car la methode a un parametere de return
     @Path("/{id}")
     public PatientEntity getOne(@PathParam("id") int id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+       // EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
 
         return em.find(PatientEntity.class, id);
     }
@@ -99,7 +121,16 @@ public class PatientRESTAPI {
             p.setPrenom(pParam.getPrenom());
             p.setDateNaissance(pParam.getDateNaissance());
             p.setAdresse(pParam.getAdresse());
-            p.setVille(pParam.getVille());
+            // cette methode  necessite la modification de tous les paramettre de ville
+           // p.setVille(pParam.getVille());   // on fait refresh(p) pour recuperer le reste des données
+
+            VilleEntity v=em.find(VilleEntity.class,pParam.getVille().getId()); // ceci est la bonne methode
+            if(v==null){
+                //on retourn  not_found qd l'element n'est pas trouvé
+                //on retourn  un problem dans le contenu par ex  put pas
+                throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            }
+            p.setVille(v);
         }
         //recuperation d'une transaction
         EntityTransaction tx = em.getTransaction();
@@ -113,6 +144,7 @@ public class PatientRESTAPI {
         } finally {
 
         }
+       // em.refresh(p);    //pour forcer la récuperation de reste des données
     }
 }
 

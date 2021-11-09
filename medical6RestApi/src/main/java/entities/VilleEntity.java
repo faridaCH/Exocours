@@ -1,9 +1,17 @@
 package entities;
 
 import javax.persistence.*;
-
+/*
 @Entity
-@Table(name = "ville", schema = "medicaldb", catalog = "")
+@Table(name = "ville", schema = "medicaldb")
+@NamedQueries({
+        @NamedQuery(name = "Ville.findAll", query = " select  p from VilleEntity p "),
+        @NamedQuery(name = "Ville.findAllByName", query = " select  p from VilleEntity p where p.nom like:nom")
+})
+
+ */
+@Entity
+@Table(name = "ville", schema = "medicaldb")
 public class VilleEntity {
     private int id;
     private String pays;

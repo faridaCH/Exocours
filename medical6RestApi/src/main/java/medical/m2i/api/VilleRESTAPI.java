@@ -2,6 +2,7 @@ package medical.m2i.api;
 
 
 import entities.VilleEntity;
+import entities.VilleEntity;
 import medical.m2i.dao.DbConncection;
 
 import javax.persistence.EntityManager;
@@ -16,8 +17,9 @@ import java.util.List;
 @Path("/ville")
 public class VilleRESTAPI {
 
+
     EntityManager em= DbConncection.getInstance();
-// ville
+    // ville
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("")
@@ -28,6 +30,8 @@ public class VilleRESTAPI {
         return p;
     }
 
+
+    // ville  getAll with @namedQuery
 
    private VilleEntity getVille(int id){
         EntityManagerFactory emf= Persistence.createEntityManagerFactory("default");
@@ -59,7 +63,7 @@ public class VilleRESTAPI {
                 tx.begin();
                 em.persist(p);
                 tx.commit();
-             //   id = patient.getId();
+             //   id = Ville.getId();
             } catch (Exception e) {
 
                 tx.rollback();

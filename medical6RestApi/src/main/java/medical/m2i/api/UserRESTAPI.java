@@ -1,6 +1,7 @@
 package medical.m2i.api;
 
 
+
 import entities.UserEntity;
 import medical.m2i.dao.DbConncection;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class UserRESTAPI {
 
     EntityManager em= DbConncection.getInstance();
+
 // user
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -26,6 +28,27 @@ public class UserRESTAPI {
         List<UserEntity> p=em.createNativeQuery("SELECT * FROM user", UserEntity.class).getResultList();
         return p;
     }
+/*// user  getAll with @namedQuery
+@GET
+@Produces(MediaType.APPLICATION_JSON)
+@Path("")
+public List<UserEntity> getAllByNom(@QueryParam("name") String unom)  {
+    List<UserEntity> p;
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+    EntityManager em = emf.createEntityManager();
+    if (unom.length() == 0) {
+        //p = em.createNativeQuery("SELECT * FROM User", UserEntity.class).getResultList();
+        p = em.createNamedQuery("User.findAll", UserEntity.class).getResultList();
+    } else {
+        p = em.createNamedQuery("User.findAllByName", UserEntity.class).setParameter("name", unom).getResultList();
+    }
+    return p;
+}
+
+ */
+
+
+
 // user1
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -49,7 +72,7 @@ public class UserRESTAPI {
                 tx.begin();
                 em.persist(p);
                 tx.commit();
-             //   id = patient.getId();
+             //   id = User.getId();
             } catch (Exception e) {
 
                 tx.rollback();

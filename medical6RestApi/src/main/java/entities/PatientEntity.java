@@ -1,10 +1,15 @@
 package entities;
 
 import javax.persistence.*;
+
 import java.sql.Date;
 
 @Entity
 @Table(name = "patient", schema = "medicaldb")
+@NamedQueries({
+        @NamedQuery(name="Patient.findAll", query=" select p from PatientEntity p"),
+        @NamedQuery(name="Patient.findAllByName", query=" select p from PatientEntity  p where lower(p.nom) like :nom "),
+})
 public class PatientEntity {
     private String nom;
     private String prenom;
