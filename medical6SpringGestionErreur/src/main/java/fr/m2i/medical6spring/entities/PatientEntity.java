@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "patient", schema = "medicaldb", catalog = "")
+@Table(name = "patient", schema = "medicaldb")
 public class PatientEntity {
     private String nom;
     private String prenom;
@@ -13,20 +13,41 @@ public class PatientEntity {
     private String adresse;
     private int id;
     private VilleEntity ville;
+    private String tel;
+   private String email;
 
-    public PatientEntity(int id, String nom, String prenom, Date dateNaissance, String adresse, VilleEntity ville) {
+    public PatientEntity(int id, String nom, String prenom, Date dateNaissance, String adresse, VilleEntity ville, String email,String tel) {
         this.id=id;
         this.nom=nom;
         this.prenom=prenom;
         this.dateNaissance=dateNaissance;
         this.adresse=adresse;
         this.ville=ville;
+        this.email=email;
+        this.tel=tel;
     }
 
     public PatientEntity() {
 
     }
+    @Basic
+    @Column(name = "tel", nullable = false)
+    public String getTel() {
+        return tel;
+    }
+    @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
 
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @Basic
     @Column(name = "nom", nullable = false)
@@ -49,7 +70,7 @@ public class PatientEntity {
     }
 
     @Basic
-    @Column(name = "dateNaissance", nullable = false)
+    @Column(name = "date_naissance", nullable = false)
     public Date getDateNaissance() {
         return dateNaissance;
     }

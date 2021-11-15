@@ -44,7 +44,7 @@ public class VilleAPIController {
 }
 
 
-@PutMapping(value="/{id}", consumes = "application/json")
+@PostMapping(value="/{id}", consumes = "application/json")
 public ResponseEntity<VilleEntity> add(@RequestBody VilleEntity v){
    System.out.println(v);
    try {
